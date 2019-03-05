@@ -190,18 +190,18 @@
 
 #define NE10_DstSrcCst_MAINLOOP_VEC3F_NEON(loopCode) { \
      n_src1 = vld1q_f32( (float32_t*)src ); \
-     src = ((void*)src)+(4*sizeof(ne10_float32_t)); \
+     src = ((char*)src)+(4*sizeof(ne10_float32_t)); \
      n_src2 = vld1q_f32( (float32_t*)src ); \
-     src = ((void*)src)+(4*sizeof(ne10_float32_t)); \
+     src = ((char*)src)+(4*sizeof(ne10_float32_t)); \
      n_src3 = vld1q_f32( (float32_t*)src ); \
-     src = ((void*)src)+(4*sizeof(ne10_float32_t)); \
+     src = ((char*)src)+(4*sizeof(ne10_float32_t)); \
      loopCode; /* The main loop iterates through three 3D vectors each time */ \
      vst1q_f32 ( (float32_t*)dst , n_dst1 ); \
-     dst = ((void*)dst)+(4*sizeof(ne10_float32_t)); \
+     dst = ((char*)dst)+(4*sizeof(ne10_float32_t)); \
      vst1q_f32 ( (float32_t*)dst , n_dst2 ); \
-     dst = ((void*)dst)+(4*sizeof(ne10_float32_t)); \
+     dst = ((char*)dst)+(4*sizeof(ne10_float32_t)); \
      vst1q_f32 ( (float32_t*)dst , n_dst3 ); \
-     dst = ((void*)dst)+(4*sizeof(ne10_float32_t)); \
+     dst = ((char*)dst)+(4*sizeof(ne10_float32_t)); \
   }
 
 #define NE10_DstSrcCst_SECONDLOOP_VEC3F_NEON(loopCode) { \
@@ -323,24 +323,24 @@
 
 #define NE10_DstAccSrcCst_MAINLOOP_VEC3F_NEON(loopCode) { \
      n_acc1 = vld1q_f32( (float32_t*)acc ); /* Load accumulator values */ \
-     acc = ((void*)acc)+(4*sizeof(ne10_float32_t)); \
+     acc = ((char*)acc)+(4*sizeof(ne10_float32_t)); \
      n_acc2 = vld1q_f32( (float32_t*)acc ); \
-     acc = ((void*)acc)+(4*sizeof(ne10_float32_t)); \
+     acc = ((char*)acc)+(4*sizeof(ne10_float32_t)); \
      n_acc3 = vld1q_f32( (float32_t*)acc ); \
-     acc = ((void*)acc)+(4*sizeof(ne10_float32_t)); \
+     acc = ((char*)acc)+(4*sizeof(ne10_float32_t)); \
      n_src1 = vld1q_f32( (float32_t*)src ); /* Load source values */ \
-     src = ((void*)src)+(4*sizeof(ne10_float32_t)); \
+     src = ((char*)src)+(4*sizeof(ne10_float32_t)); \
      n_src2 = vld1q_f32( (float32_t*)src ); \
-     src = ((void*)src)+(4*sizeof(ne10_float32_t)); \
+     src = ((char*)src)+(4*sizeof(ne10_float32_t)); \
      n_src3 = vld1q_f32( (float32_t*)src ); \
-     src = ((void*)src)+(4*sizeof(ne10_float32_t)); \
+     src = ((char*)src)+(4*sizeof(ne10_float32_t)); \
      loopCode; /* The main loop iterates through three 3D vectors each time */ \
      vst1q_f32 ( (float32_t*)dst , n_dst1 ); /* Store the results back into the memory */ \
-     dst = ((void*)dst)+(4*sizeof(ne10_float32_t)); \
+     dst = ((char*)dst)+(4*sizeof(ne10_float32_t)); \
      vst1q_f32 ( (float32_t*)dst , n_dst2 ); \
-     dst = ((void*)dst)+(4*sizeof(ne10_float32_t)); \
+     dst = ((char*)dst)+(4*sizeof(ne10_float32_t)); \
      vst1q_f32 ( (float32_t*)dst , n_dst3 ); \
-     dst = ((void*)dst)+(4*sizeof(ne10_float32_t)); \
+     dst = ((char*)dst)+(4*sizeof(ne10_float32_t)); \
   }
 
 #define NE10_DstAccSrcCst_SECONDLOOP_VEC3F_NEON(loopCode) { \
@@ -454,11 +454,11 @@
 #define NE10_DstCst_MAINLOOP_VEC3F_NEON(loopCode) { \
      loopCode; /* The main loop iterates through three 3D vectors each time */ \
      vst1q_f32 ( (float32_t*)dst , n_cst1 ); \
-     dst = ((void*)dst)+(4*sizeof(ne10_float32_t)); \
+     dst = ((char*)dst)+(4*sizeof(ne10_float32_t)); \
      vst1q_f32 ( (float32_t*)dst , n_cst2 ); \
-     dst = ((void*)dst)+(4*sizeof(ne10_float32_t)); \
+     dst = ((char*)dst)+(4*sizeof(ne10_float32_t)); \
      vst1q_f32 ( (float32_t*)dst , n_cst3 ); \
-     dst = ((void*)dst)+(4*sizeof(ne10_float32_t)); \
+     dst = ((char*)dst)+(4*sizeof(ne10_float32_t)); \
   }
 
 #define NE10_DstCst_SECONDLOOP_VEC3F_NEON(loopCode) { \

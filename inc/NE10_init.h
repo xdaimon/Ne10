@@ -37,18 +37,18 @@ extern "C" {
     /*!
         This routine returns NE10_OK if the running platform supports NEON, otherwise it returns NE10_ERR
      */
-    extern ne10_result_t ne10_HasNEON(void);
+    ne10_result_t ne10_HasNEON(void);
 
     /*!
         This routine initializes all the function pointers.
      */
-    extern ne10_result_t ne10_init(void);
+    ne10_result_t ne10_init(void);
 
     /*!
         This routine initializes all the math function pointers defined in "NE10_math.h" with pointers to ARM NEON or ARM VFP implementations.
      */
-    extern ne10_result_t ne10_init_math (ne10_int32_t is_NEON_available);
-    extern ne10_result_t ne10_init_dsp (ne10_int32_t is_NEON_available);
+    ne10_result_t ne10_init_math (ne10_int32_t is_NEON_available);
+    ne10_result_t ne10_init_dsp (ne10_result_t is_NEON_available);
 
 #ifdef __cplusplus
 }

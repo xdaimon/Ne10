@@ -1696,26 +1696,9 @@ void ne10_fft_r2c_1d_float32_neon (ne10_fft_cpx_float32_t *fout,
     ne10_fft_cpx_float32_t * tmpbuf = cfg->buffer;
     ne10_float32_t *fout_r = (ne10_float32_t*) fout;
 
-    switch (cfg->nfft)
-    {
-        case 2:
-            ne10_radix2_r2c_c ( (CPLX*) fout_r, (const CPLX*) fin);
-            fout[0].r = fout[0].i;
-            break;
-        case 4:
-            ne10_radix4_r2c_c ( (CPLX*) fout_r, (const CPLX*) fin, 1, 1, 4);
-            fout[0].r = fout[0].i;
-            break;
-        case 8:
-            ne10_radix8_r2c_c ( (CPLX*) fout_r, (const CPLX*) fin, 1, 1, 8);
-            fout[0].r = fout[0].i;
-            break;
-        default:
-            ne10_mixed_radix_r2c_butterfly_float32_neon (fout, (CPLX*) fin, cfg->r_factors_neon, cfg->r_twiddles_neon, tmpbuf);
-            ne10_radix4_r2c_with_twiddles_last_stage(fout, tmpbuf, cfg->r_super_twiddles_neon, cfg->nfft);
-            fout[cfg->nfft / 2].r = fout[0].i;
-            break;
-    }
+    ne10_mixed_radix_r2c_butterfly_float32_neon (fout, (CPLX*) fin, cfg->r_factors_neon, cfg->r_twiddles_neon, tmpbuf);
+    ne10_radix4_r2c_with_twiddles_last_stage(fout, tmpbuf, cfg->r_super_twiddles_neon, cfg->nfft);
+    fout[cfg->nfft / 2].r = fout[0].i;
     fout[0].i = fout[cfg->nfft / 2].i = 0.0f;
 }
 
@@ -1735,38 +1718,15 @@ void ne10_fft_c2r_1d_float32_neon (ne10_float32_t *fout,
     ne10_int32_t stage_count;
     ne10_int32_t radix;
 
-    switch (cfg->nfft)
+    stage_count = cfg->r_factors_neon[0];
+    radix       = cfg->r_factors_neon[  stage_count << 1 ];
+    if (radix==2)
     {
-        case 2:
-            fin[0].i = fin[0].r;
-            fin[0].r = 0.0f;
-            ne10_radix2_c2r_c  ( (CPLX*) fout, (const CPLX*) &fin[0].i);
-            fin[0].r = fin[0].i;
-            break;
-        case 4:
-            fin[0].i = fin[0].r;
-            fin[0].r = 0.0f;
-            ne10_radix4_c2r_c  ( (CPLX*) fout, (const CPLX*) &fin[0].i, 1, 1, 4);
-            fin[0].r = fin[0].i;
-            break;
-        case 8:
-            fin[0].i = fin[0].r;
-            fin[0].r = 0.0f;
-            ne10_radix8_c2r_c  ( (CPLX*) fout, (const CPLX*) &fin[0].i, 1, 1, 8);
-            fin[0].r = fin[0].i;
-            break;
-        default:
-            stage_count = cfg->r_factors_neon[0];
-            radix       = cfg->r_factors_neon[  stage_count << 1 ];
-            if (radix==2)
-            {
-                stage_count --;
-            }
-            fin[0].i = fin[cfg->nfft>>1].r;
-            fout_c = (stage_count % 2==1) ? tmpbuf : (CPLX*)fout;
-            ne10_radix4_c2r_with_twiddles_first_stage( (CPLX*) fout_c, fin, cfg->r_super_twiddles_neon, cfg->nfft);
-            ne10_mixed_radix_c2r_butterfly_float32_neon ( (CPLX*) fout, (CPLX*) NULL, cfg->r_factors_neon, cfg->r_twiddles_neon_backward, tmpbuf);
-            break;
+        stage_count --;
     }
+    fin[0].i = fin[cfg->nfft>>1].r;
+    fout_c = (stage_count % 2==1) ? tmpbuf : (CPLX*)fout;
+    ne10_radix4_c2r_with_twiddles_first_stage( (CPLX*) fout_c, fin, cfg->r_super_twiddles_neon, cfg->nfft);
+    ne10_mixed_radix_c2r_butterfly_float32_neon ( (CPLX*) fout, (CPLX*) NULL, cfg->r_factors_neon, cfg->r_twiddles_neon_backward, tmpbuf);
     fin[0].i = 0.0f;
 }
